@@ -14,7 +14,7 @@
   },
   "license": "ISC",
   "dependencies": {
-    "request": "^2.42.0"
+    "request": "^2.54.0"
   },
   "repository": "https://github.com/GeeTeam/gt-node-sdk"
 }
