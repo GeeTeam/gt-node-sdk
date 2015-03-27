@@ -1,6 +1,6 @@
 {
   "name": "geetest",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "SDK for Geetest captcha",
   "main": "index.js",
   "keywords": [
