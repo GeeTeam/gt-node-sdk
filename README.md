@@ -80,6 +80,10 @@ geetest.register(function(challenge) {
 		//put this challenge into the request of get in your website
 		//将challenge作为参数传入前端的get请求
 	}
+	else {
+		//Fail to reach the server, use failback method
+		//无法链接无服务器，使用本地验证码
+	}
 })
 ```
 

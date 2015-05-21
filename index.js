@@ -17,7 +17,8 @@ var validate = function (config, callback) {
     request.post('http://api.geetest.com/validate.php', {
       form: {
         seccode: config.seccode
-      }
+      },
+      timeout: 2000
     }, function (err, res, body) {
       callback(!err && res.statusCode === 200 && body === md5(config.seccode));
     })
