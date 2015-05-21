@@ -38,7 +38,7 @@ var register = function (callback) {
         callback(body);
       }
       else {
-        console.log('Register Fail: ' + body);
+        //console.log('Register Fail: ' + body);
         callback(false);
       }
     })

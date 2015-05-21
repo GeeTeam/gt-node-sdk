@@ -1,3 +1,8 @@
+# Latest Version 0.3.1 最新版本
+Use register api to check the server status, if it return false, switch to local captcha manually  
+
+现在可以用register接口作为检查服务器是否正常的方法，如果register返回false则切换为本地验证码
+
 
 # What's New in 0.2.0 更新内容
 Pass public key to use `register` API, optional right now, if you don't use it now, the captcha might broke some time in the future  
