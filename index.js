@@ -17,8 +17,7 @@ var validate = function (config, callback) {
     request.post('http://api.geetest.com/validate.php', {
       form: {
         seccode: config.seccode
-      },
-      timeout: 2000
+      }
     }, function (err, res, body) {
       callback(!err && res.statusCode === 200 && body === md5(config.seccode));
     })
@@ -32,8 +31,9 @@ var register = function (callback) {
   if (!publicKey) {
     throw new Error('You must init with public key as second param to use register api');
   }
-  request.get('http://api.geetest.com/register.php?gt=' + publicKey + '&sdk=Node_' + pkg.version,
-    function (err, res, body) {
+  request.get('http://api.geetest.com/register.php?gt=' + publicKey + '&sdk=Node_' + pkg.version, {
+    timeout: 2000
+  }, function (err, res, body) {
       if (!err && res.statusCode === 200) {
         callback(body);
       }
@@ -42,7 +42,6 @@ var register = function (callback) {
         callback(false);
       }
     })
-
 };
 
 var bodyParser = function (req, res, next) {
