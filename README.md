@@ -17,7 +17,6 @@ Pass public key to use `register` API, optional right now, if you don't use it n
 
 ```
 npm install geetest
-
 ```
 
 #Setup 配置
