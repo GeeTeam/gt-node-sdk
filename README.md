@@ -1,8 +1,12 @@
+#Update in 0.3.3 更新内容
+You can modify the api server address
+
+你现在可以修改APIServer的地址了
+
 # Update in 0.3.1 更新内容
 Use register api to check the server status, if it return false, switch to local captcha manually  
 
 现在可以用register接口作为检查服务器是否正常的方法，如果register返回false则切换为本地验证码
-
 
 # What's New in 0.2.0 更新内容
 Pass public key to use `register` API, optional right now, if you don't use it now, the captcha might broke some time in the future  
@@ -20,22 +24,23 @@ npm install geetest
 
 PRIVATE_KEY is the key, PUBLIC_KEY is the ID
 
-```
+```js
 var geetest = require('geetest')('YOUR_PRIVATE_KEY', ['YOUR_PUBLIC_KEY');
-
 ```
 
 #Usage 使用流程
 
 ###1.Init with private key and public key 使用私钥和公钥初始化
+```js
+var geetest = require('geetest)('Private key', 'Public Key'[, 'api server'])
 ```
-var geetest = require('geetest)('Private key', 'Public Key')
+If you are authorized to modify api server, pass the api server as third parameter, it must ends with '/'  
+如果是可以自定义api地址的用户，可以将api地址作为第三个参数传入，注意要以'/'结尾，例如'http://api.geetest.com/'
 
-```
 ###2.Use register api to get challenge on each request 
 在每次用户请求验证码时使用register接口获取challenge
 
-```
+```js
 geetest.register(function(challenge) {
 	if(challenge) {
 		//deal with it
@@ -47,7 +52,7 @@ geetest.register(function(challenge) {
 
 Put the challenge into the src 将challenge作为参数传入src
 
-```
+```js
 $http.get('/request/to/your/register/api').success(function(e) {
 	var s = document.createElement('script');
 	s.src = 'http://api.geetest.com/get.php?gt=yourPublicKey&challenge=' + challenge;
@@ -60,11 +65,8 @@ $http.get('/request/to/your/register/api').success(function(e) {
 
 See Validate API or Express Middleware below  
 见以下Validate接口或Express中间件
-
-
-
 #Node.js Validate API 验证函数
-```
+```js
 geetest.validate({
 	challenge: //form's [geetest_challenge],
 	validate: //form's [geetest_validate],
@@ -79,7 +81,7 @@ geetest.validate({
 })
 ```
 #Node.js Register API 验证函数
-```
+```js
 geetest.register(function(challenge) {
 	if(challenge) {
 		//put this challenge into the request of get in your website
@@ -92,21 +94,18 @@ geetest.register(function(challenge) {
 })
 ```
 
-
-
-
 #Express
 Note: `express.bodyParser()` is required for geetest-sdk's bodyParser.
 
 ##Use as middleware 使用中间件
 
 ###Router  路由:  
-```
+```js
 app.post('/someForm', geetest.bodyParser, yourHandler);
 ```
 
 ###API:
-```
+```js
 module.exports.yourHandler = function(req, res) {
 	if(req.geetest) {
 		console.log('GeeTest captcha validation pass');

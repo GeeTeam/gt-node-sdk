@@ -6,6 +6,8 @@ var crypto = require('crypto'),
 
 var privateKey = '', publicKey = '';
 
+var apiServer = 'http://api.geetest.com/';
+
 var md5 = function (str) {
   return crypto.createHash('md5').update(str).digest('hex');
 };
@@ -14,7 +16,7 @@ var validate = function (config, callback) {
   var hash = privateKey + 'geetest' + config.challenge;
 
   if (config.validate === md5(hash)) {
-    request.post('http://api.geetest.com/validate.php', {
+    request.post(apiServer + 'validate.php', {
       form: {
         seccode: config.seccode
       }
@@ -31,7 +33,7 @@ var register = function (callback) {
   if (!publicKey) {
     throw new Error('You must init with public key as second param to use register api');
   }
-  request.get('http://api.geetest.com/register.php?gt=' + publicKey + '&sdk=Node_' + pkg.version, {
+  request.get(apiServer + 'register.php?gt=' + publicKey + '&sdk=Node_' + pkg.version, {
     timeout: 2000
   }, function (err, res, body) {
       if (!err && res.statusCode === 200) {
@@ -61,7 +63,7 @@ var bodyParser = function (req, res, next) {
   }
 };
 
-module.exports = function (key, id) {
+module.exports = function (key, id, api) {
   privateKey = key;
   if (id) {
     publicKey = id;
@@ -71,6 +73,14 @@ module.exports = function (key, id) {
   }
   if (!id) {
     console.log('Please pass your public key as the second param to use register API')
+  }
+  if (api) {
+    if (api[api.length - 1] != '/') {
+      console.log("API server must end with \'/\'");
+    }
+    else {
+      apiServer = api
+    }
   }
   return {
     validate: validate,
