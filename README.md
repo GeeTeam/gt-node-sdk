@@ -1,3 +1,8 @@
+
+#Update in 0.4.0 更新内容
+Use recommended error handler method: callback(err, result).  
+规范了错误处理，所有的回调函数现在均遵循node规范，以callback(err, result)的形式，因此您需要按照新的方法修改您的代码以正常运行。 
+
 #Update in 0.3.3 更新内容
 You can modify the api server address
 
@@ -40,7 +45,11 @@ If you are authorized to modify api server, pass the api server as third paramet
 在每次用户请求验证码时使用register接口获取challenge
 
 ```js
-geetest.register(function(challenge) {
+geetest.register(function(err, challenge) {
+	if (err) {
+		//network error
+		return;
+	}
 	if(challenge) {
 		//deal with it
 		res.json({challenge: challenge})
@@ -48,6 +57,9 @@ geetest.register(function(challenge) {
 })
 ```
 ###3.Add captcha script to your page 在页面上添加验证的script
+
+See [Web api](http://www.geetest.com/docs/sdk/build/html/sections/web_api.html) for more detail  
+具体见[Web api](http://www.geetest.com/docs/sdk/build/html/sections/web_api.html)
 
 Put the challenge into the src 将challenge作为参数传入src
 
@@ -70,18 +82,27 @@ geetest.validate({
 	challenge: //form's [geetest_challenge],
 	validate: //form's [geetest_validate],
 	seccode: //form's [geetest_seccode],
-}, function(result) {
+}, function(err, result) {
+	if (err) {
+		//network error
+		return;
+	}
 	if(result) {
 		//validate pass
 	}
 	else {
 		//validate fail
 	}
+	
 })
 ```
 #Node.js Register API 验证函数
 ```js
-geetest.register(function(challenge) {
+geetest.register(function(err, challenge) {
+	if (err) {
+		//network error
+		return;
+	}
 	if(challenge) {
 		//put this challenge into the request of get in your website
 		//将challenge作为参数传入前端的get请求
@@ -105,7 +126,11 @@ app.post('/someForm', geetest.bodyParser, yourHandler);
 
 ###API:
 ```js
-module.exports.yourHandler = function(req, res) {
+module.exports.yourHandler = function(err, req, res, next) {
+	if(err) {
+		//network error
+		return next(err)
+	}
 	if(req.geetest) {
 		console.log('GeeTest captcha validation pass');
 		//DO WHAT EVER NEXT

@@ -21,7 +21,7 @@ var validate = function (config, callback) {
         seccode: config.seccode
       }
     }, function (err, res, body) {
-      if(err) return callback(err)
+      if(err) return callback(err);
       callback(null, body === md5(config.seccode));
     })
   }
@@ -37,7 +37,7 @@ var register = function (callback) {
   request.get(apiServer + 'register.php?gt=' + publicKey + '&sdk=Node_' + pkg.version, {
     timeout: 2000
   }, function (err, res, body) {
-      if(err) return callback(err)
+      if(err) return callback(err);
       callback(null, body);
     })
 };
@@ -49,7 +49,7 @@ var bodyParser = function (req, res, next) {
       validate: req.body.geetest_validate,
       seccode: req.body.geetest_seccode
     }, function (err, result) {
-      if(err) return next(err)
+      if(err) return next(err);
       req.geetest = result;
       next();
     })
