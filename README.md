@@ -24,18 +24,10 @@ Pass public key to use `register` API, optional right now, if you don't use it n
 npm install geetest
 ```
 
-#Setup 配置
-
-PRIVATE_KEY is the key, PUBLIC_KEY is the ID
-
-```js
-var geetest = require('geetest')('YOUR_PRIVATE_KEY', ['YOUR_PUBLIC_KEY');
-```
-
 #Usage 使用流程
 
 ###1.Init with private key and public key 使用私钥和公钥初始化
-```js
+```
 var geetest = require('geetest)('Private key', 'Public Key'[, 'api server'])
 ```
 If you are authorized to modify api server, pass the api server as third parameter, it must ends with '/'  
