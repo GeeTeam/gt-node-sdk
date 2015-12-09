@@ -1,12 +1,12 @@
-#Update in 0.5.1 更新内容
+# Update in 0.5.1 更新内容
 将sdk里面的bodyParser函数去掉，简化了各接口的内部实现，接口使用不变。
 添加了示例，并将带有failback功能的脚本统一放到了gt.js文件中，提供一个initGeetest的接口，用法参考示例
 
-#Update in 0.4.0 更新内容
+# Update in 0.4.0 更新内容
 Use recommended error handler method: callback(err, result).  
 规范了错误处理，所有的回调函数现在均遵循node规范，以callback(err, result)的形式，因此您需要按照新的方法修改您的代码以正常运行。 
 
-#Update in 0.3.3 更新内容
+# Update in 0.3.3 更新内容
 You can modify the api server address
 
 你现在可以修改APIServer的地址了
@@ -21,22 +21,22 @@ Pass public key to use `register` API, optional right now, if you don't use it n
 
 将你的Public Key作为第二个参数传入，此参数现在为可选参数，只有传入才能够使用`register`接口。Register接口可能在将来成为必须的接口
 
-#Install 安装
+# Install 安装
 
 ```
 npm install geetest
 ```
 
-#Usage 使用流程
+# Usage 使用流程
 
-###1.Init with private key and public key 使用私钥和公钥初始化
+### 1.Init with private key and public key 使用私钥和公钥初始化
 ```
 var geetest = require('geetest)('Private key', 'Public Key'[, 'api server'])
 ```
 If you are authorized to modify api server, pass the api server as third parameter, it must ends with '/'  
 如果是可以自定义api地址的用户，可以将api地址作为第三个参数传入，注意要以'/'结尾，例如'http://api.geetest.com/'
 
-###2.Use register api to get challenge on each request 
+### 2.Use register api to get challenge on each request
 在每次用户请求验证码时使用register接口获取challenge
 
 ```js
@@ -51,7 +51,7 @@ geetest.register(function(err, challenge) {
 	}
 })
 ```
-###3.Add captcha script to your page 在页面上添加验证的script
+### 3.Add captcha script to your page 在页面上添加验证的script
 
 See [Web api](http://www.geetest.com/docs/sdk/build/html/sections/web_api.html) for more detail  
 具体见[Web api](http://www.geetest.com/docs/sdk/build/html/sections/web_api.html)
@@ -67,11 +67,11 @@ $http.get('/request/to/your/register/api').success(function(e) {
 })
 
 ```
-###4.Validate the result 验证前端的提交
+### 4.Validate the result 验证前端的提交
 
 See Validate API or Express Middleware below  
 见以下Validate接口或Express中间件
-#Node.js Validate API 验证函数
+# Node.js Validate API 验证函数
 ```js
 geetest.validate({
 	challenge: //form's [geetest_challenge],
@@ -91,7 +91,7 @@ geetest.validate({
 	
 })
 ```
-#Node.js Register API 验证函数
+# Node.js Register API 验证函数
 ```js
 geetest.register(function(err, challenge) {
 	if (err) {
@@ -109,17 +109,17 @@ geetest.register(function(err, challenge) {
 })
 ```
 
-#Express
+# Express
 Note: `express.bodyParser()` is required for geetest-sdk's bodyParser.
 
-##Use as middleware 使用中间件
+## Use as middleware 使用中间件
 
-###Router  路由:  
+### Router  路由:
 ```js
 app.post('/someForm', geetest.bodyParser, yourHandler);
 ```
 
-###API:
+### API:
 ```js
 module.exports.yourHandler = function(err, req, res, next) {
 	if(err) {
