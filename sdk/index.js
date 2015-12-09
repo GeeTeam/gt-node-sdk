@@ -2,7 +2,7 @@
 
 var crypto = require('crypto'),
     request = require('request'),
-    version = "0.4.0";
+    pkg = require("./package.json");
 
 var privateKey = '', publicKey = '';
 
@@ -44,7 +44,7 @@ var validate = function (config, callback) {
 
 var register = function (callback) {
 
-    var url = apiServer + 'register.php?gt=' + publicKey + '&sdk=Node_' + version;
+    var url = apiServer + 'register.php?gt=' + publicKey + '&sdk=Node_' + pkg.version;
 
     request.get(url, {timeout: 2000}, function (err, res, body) {
 
