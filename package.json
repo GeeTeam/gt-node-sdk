@@ -1,7 +1,7 @@
 {
   "name": "geetest",
   "version": "0.5.1",
-  "description": "Node SDK Demo for Geetest captcha",
+  "description": "Node SDK for Geetest captcha",
   "main": "index.js",
   "keywords": [
     "Geetest",
@@ -14,6 +14,7 @@
   },
   "license": "ISC",
   "dependencies": {
+    "request": "^2.54.0",
     "express": "^4.13.3",
     "body-parser": "^1.14.1"
   },
