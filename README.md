@@ -1,3 +1,6 @@
+#Update in 0.5.0 更新内容
+修改了sdk模块的存放位置。将sdk里面的bodyParser函数去掉，简化了各接口的内部实现，接口使用不变，并将sdk模块存放在sdk目录下。
+添加了示例，并将带有failback功能的脚本统一放到了gt.js文件中，提供一个initGeetest的接口，用法参考示例
 
 #Update in 0.4.0 更新内容
 Use recommended error handler method: callback(err, result).  
