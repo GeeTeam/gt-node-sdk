@@ -31,10 +31,8 @@ npm install geetest
 
 ### 1.Init with private key and public key 使用私钥和公钥初始化
 ```
-var geetest = require('geetest)('Private key', 'Public Key'[, 'api server'])
+var geetest = require('geetest)('Private key', 'Public Key')
 ```
-If you are authorized to modify api server, pass the api server as third parameter, it must ends with '/'  
-如果是可以自定义api地址的用户，可以将api地址作为第三个参数传入，注意要以'/'结尾，例如'http://api.geetest.com/'
 
 ### 2.Use register api to get challenge on each request
 在每次用户请求验证码时使用register接口获取challenge

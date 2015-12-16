@@ -60,26 +60,13 @@ var register = function (callback) {
     });
 };
 
-module.exports = function (key, id, api) {
+module.exports = function (key, id) {
 
     if (!key) {
         throw new Error('Private Key Required');
     }
     if (!id) {
         throw new Error("Public Key Required");
-    }
-
-    if (api) {
-
-        if (api[api.length - 1] != '/') {
-
-            throw new Error("API server must end with \"/\"");
-
-        } else {
-
-            apiServer = api
-
-        }
     }
 
     privateKey = key;

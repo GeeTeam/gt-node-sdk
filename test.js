@@ -3,9 +3,8 @@ var bodyParser = require("body-parser");
 
 var privateKey = '50ed17103f109ccf7c25e93cb6e0d378';
 var publicKey = 'a0ec7ce42d4291382bfc9ca488313b80';
-var api = 'http://api.geetest.com/';
 
-var geetest = require("./gt-sdk")(privateKey, publicKey, api);
+var geetest = require("./gt-sdk")(privateKey, publicKey);
 
 var app = express();
 
