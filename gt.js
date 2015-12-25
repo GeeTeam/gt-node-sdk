@@ -1,16 +1,40 @@
 var initGeetest = (function (window, document) {
 
-    var head = document.getElementsByTagName("head")[0];
-
     var random = function () {
 
         return parseInt(Math.random() * 10000) + (new Date()).valueOf();
 
     };
 
-    var status;
-
     var callbacks = [];
+
+    var status = "loading";
+
+    // 加载Geetest库
+    var cb = "geetest_" + random();
+
+    window[cb] = function () {
+
+        status = "loaded";
+
+        window[cb] = undefined;
+        try {
+            delete window[cb];
+        } catch (e) {
+        }
+    };
+
+    var s = document.createElement("script");
+
+    s.onerror = function () {
+
+        status = "fail";
+
+    };
+
+    s.src = (location.protocol === "https:" ? "https:" : "http:") + "//api.geetest.com/get.php?callback=" + cb;
+
+    document.getElementsByTagName("head")[0].appendChild(s);
 
     return function (config, callback) {
 
@@ -71,45 +95,7 @@ var initGeetest = (function (window, document) {
 
         } else {
 
-            status = "loading";
 
-            // 加载Geetest库
-            var cb = "geetest_" + random();
-
-            window[cb] = function () {
-
-                status = "loaded";
-
-                for (var i = 0, len = callbacks.length; i < len; i = i + 1) {
-                    callbacks[i]();
-                }
-
-                initGeetest();
-
-                window[cb] = undefined;
-                try {
-                    delete window[cb];
-                } catch (e) {
-                }
-            };
-
-            var s = document.createElement("script");
-
-            s.onerror = function () {
-
-                status = "fail";
-
-                for (var i = 0, len = callbacks.length; i < len; i = i + 1) {
-                    callbacks[i]();
-                }
-
-                backendDown();
-
-            };
-
-            s.src = protocol + "api.geetest.com/get.php?callback=" + cb;
-
-            head.appendChild(s);
 
         }
     };
