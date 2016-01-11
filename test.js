@@ -29,16 +29,18 @@ app.get("/register", function (req, res) {
         success: false
       }));
     } else {
-      res.send(JSON.stringify({
+      res.send(req.query.callback + "(" + JSON.stringify({
         gt: publicKey,
         challenge: data,
         success: true
-      }));
+      }) + ")");
     }
   })
 });
 
 app.post("/validate", function (req, res) {
+
+  
 
   geetest.validate({
 
@@ -55,7 +57,7 @@ app.post("/validate", function (req, res) {
       data.status = "fail";
     }
 
-    res.send(JSON.stringify(data));
+    res.send(req.query.callback + "(" + JSON.stringify(data) + ")");
 
   });
 });

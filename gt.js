@@ -1,52 +1,73 @@
 var initGeetest = (function (window, document) {
 
     var random = function () {
-
         return parseInt(Math.random() * 10000) + (new Date()).valueOf();
-
     };
+
+    var head = document.getElementsByTagName("head")[0];
 
     var callbacks = [];
 
-    var status = "loading";
+    var run = function () {
+        for (var i = 0, len = callbacks.length; i < len; i = i + 1) {
+            callbacks[i]();
+        }
+        callbacks = [];
+    };
 
-    // 加载Geetest库
-    var cb = "geetest_" + random();
+    var status;
 
-    window[cb] = function () {
+    if (window.Geetest || document.getElementById("gt_lib")) {
 
         status = "loaded";
 
-        window[cb] = undefined;
-        try {
-            delete window[cb];
-        } catch (e) {
-        }
-    };
+    } else {
 
-    var s = document.createElement("script");
+        status = "loading";
 
-    s.onerror = function () {
+        // 加载Geetest库
+        var cb = "geetest_" + random();
 
-        status = "fail";
+        window[cb] = function () {
 
-    };
+            status = "loaded";
 
-    s.src = (location.protocol === "https:" ? "https:" : "http:") + "//api.geetest.com/get.php?callback=" + cb;
+            run();
 
-    document.getElementsByTagName("head")[0].appendChild(s);
+            window[cb] = undefined;
+            try {
+                delete window[cb];
+            } catch (e) {
+            }
+        };
+
+        var s = document.createElement("script");
+
+        s.onerror = function () {
+
+            status = "fail";
+
+            run();
+
+        };
+
+        s.src = (location.protocol === "https:" ? "https:" : "http:") + "//api.geetest.com/get.php?callback=" + cb;
+
+        head.appendChild(s);
+
+    }
 
     return function (config, callback) {
 
         var protocol = config.https ? "https://" : "http://";
 
-        var initGeetest = function () {
+        var init = function () {
 
             callback(new window.Geetest(config));
 
         };
 
-        var backendDown = function () {
+        var down = function () {
 
             var s = document.createElement("script");
 
@@ -64,7 +85,7 @@ var initGeetest = (function (window, document) {
 
                 if (!this.readyState || this.readyState === "loaded" || this.readyState === "complete") {
 
-                    initGeetest();
+                    init();
 
                     s.onload = s.onreadystatechange = null;
                 }
@@ -74,12 +95,12 @@ var initGeetest = (function (window, document) {
         if (status === "loaded") {
 
             // Geetest对象已经存在，则直接初始化
-            initGeetest();
+            init();
 
         } else if (status === "fail") {
 
             // 无法动态获取Geetest库，则去获取geetest.0.0.0.js
-            backendDown();
+            down();
 
         } else if (status === "loading") {
 
@@ -87,16 +108,14 @@ var initGeetest = (function (window, document) {
             callbacks.push(function () {
 
                 if (status === "fail") {
-                    backendDown();
+
+                    down();
+
                 } else {
-                    initGeetest();
+
+                    init();
                 }
             });
-
-        } else {
-
-
-
         }
     };
 
