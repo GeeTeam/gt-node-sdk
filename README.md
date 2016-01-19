@@ -31,7 +31,7 @@ npm install geetest
 
 ### 1.Init with private key and public key 使用私钥和公钥初始化
 ```
-var geetest = require('geetest)('Private key', 'Public Key')
+var geetest = require('geetest')('Private key', 'Public Key')
 ```
 
 ### 2.Use register api to get challenge on each request
