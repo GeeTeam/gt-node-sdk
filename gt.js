@@ -1,23 +1,64 @@
 var initGeetest = (function (window, document) {
 
+    var head = document.getElementsByTagName("head")[0];
+    var protocol = location.protocol + "//";
+    var callbacks = [];
+    var status;
+
     var random = function () {
         return parseInt(Math.random() * 10000) + (new Date()).valueOf();
     };
-
-    var head = document.getElementsByTagName("head")[0];
-
-    var callbacks = [];
-
     var run = function () {
         for (var i = 0, len = callbacks.length; i < len; i = i + 1) {
             callbacks[i]();
         }
         callbacks = [];
     };
+    var detect = function () {
+        return window.Geetest || document.getElementById("gt_lib");
+    };
+    var down = function () {
 
-    var status;
+        var s = document.createElement("script");
+        s.charset = "UTF-8";
+        s.type = "text/javascript";
 
-    if (window.Geetest || document.getElementById("gt_lib")) {
+        s.onload = s.onreadystatechange = function () {
+
+            if (!this.readyState || this.readyState === "loaded" || this.readyState === "complete") {
+
+                if (detect()) {
+
+                    status = "loaded";
+                    run();
+                    s.onload = s.onreadystatechange = null;
+
+                } else {
+
+                    status = "fail";
+
+                    throw new Error("网络错误");
+
+                }
+
+                s.onload = s.onreadystatechange = null;
+            }
+        };
+
+        s.onerror = function () {
+
+            status = "fail";
+            s.onerror = null;
+
+            throw new Error("网络错误");
+        };
+
+        s.src = protocol + "static.geetest.com/static/js/geetest.0.0.0.js";
+        head.appendChild(s);
+
+    };
+
+    if (detect()) {
 
         status = "loaded";
 
@@ -25,7 +66,6 @@ var initGeetest = (function (window, document) {
 
         status = "loading";
 
-        // 加载Geetest库
         var cb = "geetest_" + random();
 
         window[cb] = function () {
@@ -42,24 +82,29 @@ var initGeetest = (function (window, document) {
         };
 
         var s = document.createElement("script");
+        s.charset = "UTF-8";
+        s.type = "text/javascript";
 
-        s.onerror = function () {
+        s.onload = s.onreadystatechange = function () {
 
-            status = "fail";
+            if (!this.readyState || this.readyState === "loaded" || this.readyState === "complete") {
 
-            run();
+                if (!detect()) {
 
+                    down();
+
+                }
+
+            }
         };
 
-        s.src = (location.protocol === "https:" ? "https:" : "http:") + "//api.geetest.com/get.php?callback=" + cb;
-
+        s.onerror = down;
+        s.src = protocol + "api.geetest.com/get.php?callback=" + cb;
         head.appendChild(s);
 
     }
 
     return function (config, callback) {
-
-        var protocol = config.https ? "https://" : "http://";
 
         var init = function () {
 
@@ -67,54 +112,20 @@ var initGeetest = (function (window, document) {
 
         };
 
-        var down = function () {
-
-            var s = document.createElement("script");
-
-            s.id = "gt_lib";
-
-            s.src = protocol + "static.geetest.com/static/js/geetest.0.0.0.js";
-
-            s.charset = "UTF-8";
-
-            s.type = "text/javascript";
-
-            head.appendChild(s);
-
-            s.onload = s.onreadystatechange = function () {
-
-                if (!this.readyState || this.readyState === "loaded" || this.readyState === "complete") {
-
-                    init();
-
-                    s.onload = s.onreadystatechange = null;
-                }
-            };
-        };
-
         if (status === "loaded") {
 
-            // Geetest对象已经存在，则直接初始化
             init();
 
         } else if (status === "fail") {
 
-            // 无法动态获取Geetest库，则去获取geetest.0.0.0.js
-            down();
+            throw new Error("网络错误");
 
         } else if (status === "loading") {
 
-            // 之前已经去加载Geetest库了，将回调加入callbacks，等Geetest库好后去回调
             callbacks.push(function () {
 
-                if (status === "fail") {
+                init();
 
-                    down();
-
-                } else {
-
-                    init();
-                }
             });
         }
     };

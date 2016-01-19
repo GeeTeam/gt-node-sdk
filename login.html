@@ -75,32 +75,51 @@
 
     var handler = function (captchaObj) {
 
-        var validate = false;
+        var success = false;
+
+        window.captchaObj = captchaObj;
 
         $("#submit").click(function () {
 
+            var validate = captchaObj.getValidate();
+
             if (!validate) {
 
-                if ($("#notice")[0].className === "hide") {
+                $("#notice")[0].className = "show";
 
-                    $("#notice")[0].className = "show";
+                setTimeout(function () {
 
-                    setTimeout(function () {
+                    $("#notice")[0].className = "hide";
 
-                        $("#notice")[0].className = "hide";
+                }, 2000);
 
-                    }, 2000);
-                }
-
-            } else {
-
-                alert("登录成功");
-
-                validate = false;
-
-                // 每次验证完成后刷新
-                captchaObj.refresh();
+                return;
             }
+
+            $.ajax({
+                url: "/validate",
+                type: "post",
+                dataType: "json",
+                data: validate,
+                success: function (data) {
+
+                    if (data && (data.status === "success")) {
+
+                        alert("登录成功");
+
+                    } else {
+
+                        alert("登录失败，请完成验证");
+
+                        captchaObj.refresh();
+                    }
+
+                },
+                error: function () {
+                    alert("网络错误");
+                }
+            });
+
         });
 
         // 将验证码加到id为captcha的元素里
@@ -111,30 +130,13 @@
             $("#wait")[0].className = "hide";
 
         });
-
-        // 验证码拖动成功，进行二次验证码
-        captchaObj.onSuccess(function () {
-
-            $.ajax({
-                url: "/validate",
-                type: "post",
-                dataType: "jsonp",
-                data: captchaObj.getValidate(),
-                success: function (data) {
-
-                    validate = data && (data.status === "success");
-
-                }
-            });
-
-        });
     };
 
     $.ajax({
         // 获取id，challenge，success（是否启用failback）
         url: "/register?t=" + (new Date()).getTime(), // 加随机数防止缓存
         type: "get",
-        dataType: "jsonp", // 使用jsonp格式
+        dataType: "json", // 使用jsonp格式
         success: function (data) {
 
             // 使用initGeetest接口
