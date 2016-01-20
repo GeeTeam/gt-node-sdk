@@ -1,4 +1,8 @@
-var initGeetest = (function (window, document) {
+(function (window, document) {
+
+    if (window.initGeetest) {
+        return;
+    }
 
     var head = document.getElementsByTagName("head")[0];
     var protocol = location.protocol + "//";
@@ -30,8 +34,8 @@ var initGeetest = (function (window, document) {
                 if (detect()) {
 
                     status = "loaded";
+
                     run();
-                    s.onload = s.onreadystatechange = null;
 
                 } else {
 
@@ -104,7 +108,7 @@ var initGeetest = (function (window, document) {
 
     }
 
-    return function (config, callback) {
+    window.initGeetest = function (config, callback) {
 
         var init = function () {
 
@@ -130,4 +134,4 @@ var initGeetest = (function (window, document) {
         }
     };
 
-}(window, document));
+})(window, document);
