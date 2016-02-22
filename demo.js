@@ -1,8 +1,8 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 
-var privateKey = '50ed17103f109ccf7c25e93cb6e0d378';
-var publicKey = 'a0ec7ce42d4291382bfc9ca488313b80';
+var privateKey = '36fc3fe98530eea08dfc6ce76e3d24c4';
+var publicKey = 'b46d1900d0a894591916ea94ea91bd2c';
 
 var geetest = require("./gt-sdk")(privateKey, publicKey);
 
@@ -26,13 +26,13 @@ app.get("/register", function (req, res) {
     if (err) {
       res.send(JSON.stringify({
         gt: publicKey,
-        success: false
+        success: 0
       }));
     } else {
       res.send(JSON.stringify({
         gt: publicKey,
         challenge: data,
-        success: true
+        success: 1
       }));
     }
   });
@@ -60,11 +60,9 @@ app.post("/validate", function (req, res) {
   });
 });
 
-var server = app.listen(8080, function () {
+var port = 8080;
+var server = app.listen(port, function () {
 
-  var host = server.address().address;
-  var port = server.address().port;
-
-  console.log('Example app listening at http://%s:%s', host, port)
+  console.log('Example app listening at http://localhost:' + port)
 
 });

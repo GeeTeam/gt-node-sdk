@@ -51,15 +51,11 @@ var register = function (callback) {
         if (err) {
 
             // failback
-            callback(null, JSON.stringify({
-                gt: publicKey,
-                challenge: "111222333444555666777888",
-                success: 0
-            }));
+            callback(err);
 
         } else {
 
-            callback(null, body);
+            callback(null, md5(body + privateKey));
 
         }
     });
