@@ -1,3 +1,6 @@
+# Update in 0.5.4 更新内容
+对challenge进行md5操作，增加安全性。
+
 # Update in 0.5.1 更新内容
 将sdk里面的bodyParser函数去掉，简化了各接口的内部实现，接口使用不变。
 添加了示例，并将带有failback功能的脚本统一放到了gt.js文件中，提供一个initGeetest的接口，用法参考示例

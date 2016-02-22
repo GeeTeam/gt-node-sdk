@@ -1,6 +1,6 @@
 {
   "name": "geetest",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "Node SDK for Geetest captcha",
   "main": "gt-sdk.js",
   "keywords": [
