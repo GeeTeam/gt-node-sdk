@@ -4,17 +4,29 @@ var crypto = require('crypto'),
     request = require('request'),
     pkg = require("./package.json");
 
-var privateKey = '', publicKey = '';
-
 var apiServer = 'http://api.geetest.com/';
 
 var md5 = function (str) {
     return crypto.createHash('md5').update(str).digest('hex');
 };
 
-var validate = function (config, callback) {
+function Geetest(key, id) {
 
-    var hash = privateKey + 'geetest' + config.challenge;
+    if (!key) {
+        throw new Error('Private Key Required');
+    }
+    if (!id) {
+        throw new Error("Public Key Required");
+    }
+
+    this.privateKey = key;
+
+    this.publicKey = id;
+}
+
+Geetest.prototype.validate = function (config, callback) {
+
+    var hash = this.privateKey + 'geetest' + config.challenge;
 
     if (config.validate === md5(hash)) {
 
@@ -42,9 +54,10 @@ var validate = function (config, callback) {
     }
 };
 
-var register = function (callback) {
+Geetest.prototype.register = function (callback) {
 
-    var url = apiServer + 'register.php?gt=' + publicKey + '&sdk=Node_' + pkg.version;
+    var self = this;
+    var url = apiServer + 'register.php?gt=' + this.publicKey + '&sdk=Node_' + pkg.version;
 
     request.get(url, {timeout: 2000}, function (err, res, body) {
 
@@ -55,7 +68,7 @@ var register = function (callback) {
 
         } else {
 
-            callback(null, md5(body + privateKey));
+            callback(null, md5(body + self.privateKey));
 
         }
     });
@@ -63,19 +76,5 @@ var register = function (callback) {
 
 module.exports = function (key, id) {
 
-    if (!key) {
-        throw new Error('Private Key Required');
-    }
-    if (!id) {
-        throw new Error("Public Key Required");
-    }
-
-    privateKey = key;
-
-    publicKey = id;
-
-    return {
-        validate: validate,
-        register: register
-    }
+    return new Geetest(key, id);
 };
