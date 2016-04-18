@@ -1,3 +1,8 @@
+# Update in 1.0.0 更新内容
+
+1.添加多实例验证码创建方法
+2.更新demo
+
 # Update in 0.5.4 更新内容
 对challenge进行md5操作，增加安全性。
 
@@ -6,7 +11,7 @@
 添加了示例，并将带有failback功能的脚本统一放到了gt.js文件中，提供一个initGeetest的接口，用法参考示例
 
 # Update in 0.4.0 更新内容
-Use recommended error handler method: callback(err, result).  
+Use recommended error handler method: callback(err, result).
 规范了错误处理，所有的回调函数现在均遵循node规范，以callback(err, result)的形式，因此您需要按照新的方法修改您的代码以正常运行。 
 
 # Update in 0.3.3 更新内容
@@ -32,109 +37,6 @@ npm install geetest
 
 # Usage 使用流程
 
-### 1.Init with private key and public key 使用私钥和公钥初始化
-```
-var geetest = require('geetest')('Private key', 'Public Key')
-```
+### 使用前，强烈建议您阅读我们的 [入门文档](www.geetest.com/install/sections/idx-main-frame.html)
 
-### 2.Use register api to get challenge on each request
-在每次用户请求验证码时使用register接口获取challenge
-
-```js
-geetest.register(function(err, challenge) {
-	if (err) {
-		//network error
-		return;
-	}
-	if(challenge) {
-		//deal with it
-		res.json({challenge: challenge})
-	}
-})
-```
-### 3.Add captcha script to your page 在页面上添加验证的script
-
-See [Web api](http://www.geetest.com/docs/sdk/build/html/sections/web_api.html) for more detail  
-具体见[Web api](http://www.geetest.com/docs/sdk/build/html/sections/web_api.html)
-
-Put the challenge into the src 将challenge作为参数传入src
-
-```js
-$http.get('/request/to/your/register/api').success(function(e) {
-	var s = document.createElement('script');
-	s.src = 'http://api.geetest.com/get.php?gt=yourPublicKey&challenge=' + challenge;
-	s.async = true;
-	document.body.append(s);//append the script where ever you want
-})
-
-```
-### 4.Validate the result 验证前端的提交
-
-See Validate API or Express Middleware below  
-见以下Validate接口或Express中间件
-# Node.js Validate API 验证函数
-```js
-geetest.validate({
-	challenge: //form's [geetest_challenge],
-	validate: //form's [geetest_validate],
-	seccode: //form's [geetest_seccode],
-}, function(err, result) {
-	if (err) {
-		//network error
-		return;
-	}
-	if(result) {
-		//validate pass
-	}
-	else {
-		//validate fail
-	}
-	
-})
-```
-# Node.js Register API 验证函数
-```js
-geetest.register(function(err, challenge) {
-	if (err) {
-		//network error
-		return;
-	}
-	if(challenge) {
-		//put this challenge into the request of get in your website
-		//将challenge作为参数传入前端的get请求
-	}
-	else {
-		//Fail to reach the server, use failback method
-		//无法链接无服务器，使用本地验证码
-	}
-})
-```
-
-# Express
-Note: `express.bodyParser()` is required for geetest-sdk's bodyParser.
-
-## Use as middleware 使用中间件
-
-### Router  路由:
-```js
-app.post('/someForm', geetest.bodyParser, yourHandler);
-```
-
-### API:
-```js
-module.exports.yourHandler = function(err, req, res, next) {
-	if(err) {
-		//network error
-		return next(err)
-	}
-	if(req.geetest) {
-		console.log('GeeTest captcha validation pass');
-		//DO WHAT EVER NEXT
-		res.json({success: true})
-	}
-	else {
-		res.json({err: 'GeeTest captcha validation fail'});
-	}
-}
-
-```
+### 最后，使用方式请参见提供的demo.js文件

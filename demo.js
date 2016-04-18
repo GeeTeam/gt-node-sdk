@@ -24,6 +24,7 @@ app.get("/gt.js", function (req, res) {
 
 app.get("/register", function (req, res) {
 
+  // 向极验申请一次验证所需的challenge
   geetest.register(function (err, data) {
     if (err) {
       res.send(JSON.stringify({
@@ -42,6 +43,7 @@ app.get("/register", function (req, res) {
 
 app.post("/validate", function (req, res) {
 
+  // 对ajax提交的验证结果值进行验证
   geetest.validate({
 
     challenge: req.body.geetest_challenge,
@@ -65,6 +67,7 @@ app.post("/validate", function (req, res) {
 
 app.post("/form-validate", function (req, res) {
 
+  // 对ajax表达提交的验证码结果值进行验证
   geetest.validate({
 
     challenge: req.body.geetest_challenge,
