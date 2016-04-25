@@ -14,6 +14,7 @@ app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({extended: true}));
 
+app.use(express.static('./'));
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/login.html");
 });
@@ -75,11 +76,10 @@ app.post("/form-validate", function (req, res) {
     seccode: req.body.geetest_seccode
 
   }, function (err, result) {
-
     if (err || !result) {
-      res.send('<h1>登录失败</h1>')
+      res.send("<h1 style='text-align: center'>登陆失败</h1>")
     } else {
-      res.send('<h1>登录成功</h1>')
+      res.send("<h1 style='text-align: center'>登陆成功</h1>")
     }
   });
 });

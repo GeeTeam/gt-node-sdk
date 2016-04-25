@@ -95,16 +95,11 @@
 
                     if (data && (data.status === "success")) {
 
-                        alert("登录成功");
+                        $(document.body).html('<h1>登录成功</h1>');
 
                     } else {
 
-                        alert("登录失败，请完成验证");
-
-                        setTimeout(function () {
-                            // 刷新验证码
-                            captchaObj.refresh();
-                        }, 500)
+                        $(document.body).html('<h1>登录失败</h1>');
                     }
                 }
             });
