@@ -82,7 +82,7 @@
                 return;
             }
             $.ajax({
-                url: "/validate", // 进行二次验证
+                url: "/geetest/validate", // 进行二次验证
                 type: "post",
                 dataType: "json",
                 data: {
@@ -116,7 +116,7 @@
 
     $.ajax({
         // 获取id，challenge，success（是否启用failback）
-        url: "/register?t=" + (new Date()).getTime(), // 加随机数防止缓存
+        url: "/geetest/register?t=" + (new Date()).getTime(), // 加随机数防止缓存
         type: "get",
         dataType: "json",
         success: function (data) {
@@ -137,7 +137,7 @@
 <br><br>
 <hr>
 <br><br>
-<form class="popup" action="/form-validate" method="post">
+<form class="popup" action="/geetest/form-validate" method="post">
     <h2>嵌入式Demo，使用表单形式提交二次验证所需的验证结果值</h2>
     <br>
     <p>
@@ -185,7 +185,7 @@
     };
     $.ajax({
         // 获取id，challenge，success（是否启用failback）
-        url: "/register?t=" + (new Date()).getTime(), // 加随机数防止缓存
+        url: "/geetest/register?t=" + (new Date()).getTime(), // 加随机数防止缓存
         type: "get",
         dataType: "json",
         success: function (data) {
