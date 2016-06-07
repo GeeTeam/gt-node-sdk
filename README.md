@@ -37,6 +37,6 @@ npm install geetest
 
 # Usage 使用流程
 
-### 使用前，强烈建议您阅读我们的 [入门文档](www.geetest.com/install/sections/idx-main-frame.html)
+### 使用前，强烈建议您阅读我们的 [入门文档](http://www.geetest.com/install/sections/idx-main-frame.html)
 
 ### 最后，使用方式请参见提供的demo.js文件
