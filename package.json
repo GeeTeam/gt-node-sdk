@@ -20,5 +20,8 @@
     "express": "^4.13.3",
     "body-parser": "^1.14.1"
   },
-  "repository": "https://github.com/GeeTeam/gt-node-sdk"
+  "repository": "https://github.com/GeeTeam/gt-node-sdk",
+  "scripts": {
+    "server": "node demo/app.js"
+  }
 }

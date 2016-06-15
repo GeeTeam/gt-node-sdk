@@ -80,6 +80,6 @@ app.post("/geetest/form-validate", function (req, res) {
 });
 
 var port = 8080;
-var server = app.listen(port, function () {
+app.listen(port, function () {
     console.log('listening at http://localhost:' + port)
 });
