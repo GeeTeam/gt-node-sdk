@@ -1,12 +1,12 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 
-var privateKey = '36fc3fe98530eea08dfc6ce76e3d24c4';
-var publicKey = 'b46d1900d0a894591916ea94ea91bd2c';
-
 var Geetest = require('../gt-sdk');
 
-var geetest = new Geetest(privateKey, publicKey);
+var geetest = new Geetest({
+    privateKey: '36fc3fe98530eea08dfc6ce76e3d24c4',
+    publicKey: 'b46d1900d0a894591916ea94ea91bd2c'
+});
 
 var app = express();
 
@@ -23,19 +23,12 @@ app.get("/", function (req, res) {
 app.get("/geetest/register", function (req, res) {
 
     // 向极验申请一次验证所需的challenge
-    geetest.register(function (err, data) {
-        if (err) {
-            res.send(JSON.stringify({
-                gt: publicKey,
-                success: 0
-            }));
-        } else {
-            res.send(JSON.stringify({
-                gt: publicKey,
-                challenge: data,
-                success: 1
-            }));
-        }
+    geetest.register(function (data) {
+        res.send(JSON.stringify({
+            gt: geetest.publicKey,
+            challenge: data.challenge,
+            success: data.success
+        }));
     });
 });
 
