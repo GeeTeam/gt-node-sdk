@@ -91,7 +91,7 @@ Geetest.prototype = {
         var bg_name = md5(img_grp_index).slice(10,20);
         var answer_decode = '';
         var i;
-        for (i = 0; i < 10; i = i + 1) {
+        for (i = 0; i < 9; i = i + 1) {
             if (i % 2 == 0) {
                 answer_decode += full_bg_name[i];
             } else {
@@ -140,7 +140,7 @@ Geetest.prototype = {
         var i, len, temp_array = [];
         for (i = 0, len = str_base.length; i < len; i = i + 1) {
             var temp_char = str_base[i];
-            var temp_ascii = temp_char.charCodeAt();
+            var temp_ascii = temp_char.charCodeAt(0);
             var result = temp_ascii > 57 ? temp_ascii - 87 : temp_ascii - 48;
             temp_array.push(result);
         }

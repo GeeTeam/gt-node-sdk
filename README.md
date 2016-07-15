@@ -17,21 +17,33 @@ npm run server
 ```
 
 # 使用说明
-sdk提供Geetest构造函数，实例化时必须传入id和key参数
-id和key申请地址：http://account.geetest.com/
+
+sdk提供Geetest构造函数，实例化时需要传入一个配置对象
+
+配置对象的字段如下：
+
+- privateKey：验证私钥，**必须**
+- publicKey：验证公钥，**必须**
+- protocol：与极验服务器交互时使用的协议，默认为http://，**可选**
+- apiServer：针对私有化用户提供对默认的api.geetest.com进行修改，普通用户无需关注此选项，**可选**
+
+privateKey和publicKey申请地址：http://account.geetest.com/
 ```
-var id = 'xxx'; // 将xxx替换成您申请的id
-var key = 'xxx'; // 将xxx替换成您申请的key
 var Geetest = require('geetest');
-var captcha = new Geetest(id, key);
+var captcha = new Geetest({
+    privateKey: 'xxx', // 将xxx替换为您申请的privateKey
+    publicKey: 'xxx', // 将xxx替换为您申请的publicKey
+});
 ```
 
 上述Geetest的实例captcha提供两个方法：
 
 ## register(callback)
 ```
-captcha.register(function (err, challenge) {
-    // challenge为成功申请的注册码，前端验证码初始时必备的参数
+captcha.register(function (data) {
+    // data为一个对象，里面包含challenge和success字段
+    // 正常模式下challenge为32为，success为1
+    // failback模式下challenge为34为，success为0
 });
 ```
 ## validate(result, callback)
@@ -41,6 +53,7 @@ captcha.validate({
     validate: 'xxx',
     seccode: 'xxx'
 }, function (err, success) {
+    // err存在表示出现网络错误
     // success表示二次查询是否成功
 }
 ```
