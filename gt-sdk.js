@@ -34,12 +34,28 @@ function Geetest(config) {
 Geetest.prototype = {
 
     PROTOCOL: 'http://',
-    API_SERVER: 'api.geetest.coma',
+    API_SERVER: 'api.geetest.com',
     VALIDATE_PATH: '/validate.php',
     REGISTER_PATH: '/register.php',
 
     validate: function (result, callback) {
+        var that = this;
+        return new Promise(function (resolve, reject) {
+            that._validate(result, function (err, data) {
+                console.log(data);
+                if (typeof callback === 'function') {
+                    callback(err, data);
+                }
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            });
+        })
+    },
 
+    _validate: function (result, callback) {
         var challenge = result.challenge;
         var validate = result.validate;
 
@@ -150,6 +166,19 @@ Geetest.prototype = {
 
 
     register: function (callback) {
+
+        var that = this;
+        return new Promise(function (resolve) {
+            that._register(function (data) {
+                if (typeof callback === 'function') {
+                    callback(data);
+                }
+                resolve(data);
+            });
+        });
+    },
+
+    _register: function (callback) {
         var url = this.API_SERVER + this.REGISTER_PATH
             + '?gt=' + this.publicKey + '&sdk=Node_' + pkg.version;
 
