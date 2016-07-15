@@ -40,9 +40,10 @@ Geetest.prototype = {
 
     validate: function (result, callback) {
         var that = this;
+
         return new Promise(function (resolve, reject) {
+
             that._validate(result, function (err, data) {
-                console.log(data);
                 if (typeof callback === 'function') {
                     callback(err, data);
                 }
@@ -59,7 +60,7 @@ Geetest.prototype = {
         var challenge = result.challenge;
         var validate = result.validate;
 
-        if (challenge.length !== 32) {
+        if (validate.split('_').length === 3) {
 
             var validate_strs = validate.split('_');
             var encode_ans = validate_strs[0];
@@ -82,7 +83,8 @@ Geetest.prototype = {
 
             var hash = this.privateKey + 'geetest' + result.challenge;
             if (result.validate === md5(hash)) {
-                var url = this.API_SERVER + this.VALIDATE_PATH;
+                var url = this.PROTOCOL + this.API_SERVER + this.VALIDATE_PATH;
+
                 request.post(url, {
                     form: {
                         seccode: result.seccode
@@ -179,7 +181,7 @@ Geetest.prototype = {
     },
 
     _register: function (callback) {
-        var url = this.API_SERVER + this.REGISTER_PATH
+        var url = this.PROTOCOL + this.API_SERVER + this.REGISTER_PATH
             + '?gt=' + this.publicKey + '&sdk=Node_' + pkg.version;
 
         var that = this;
