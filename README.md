@@ -61,5 +61,5 @@ captcha.validate({
 
 ### 使用前，强烈建议您阅读我们的 [入门文档](http://www.geetest.com/install/sections/idx-main-frame.html)
 
-### 更新历史：[CHANGELOG](CHANGELOG)
+### 更新历史：[CHANGELOG](CHANGELOG.md)
 

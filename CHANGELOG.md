@@ -4,7 +4,7 @@
 2. 修改了接口register的回调参数
 3. 实例化传参改为传入一个配置对象
 
-具体请参照用法说明：[README](README)
+具体请参照用法说明：[README](README.md)
 
 # Update in 1.0.0 更新内容
 
