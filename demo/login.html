@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>gt-node-sdk-demo</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
         body {
             margin: 50px 0;
             text-align: center;
@@ -39,87 +36,28 @@
         #notice {
             color: red;
         }
-        .logo {
-            height: 85px;
-            background: url("http://www.geetest.com/images/mobile/logo.svg") no-repeat center center;
-            background-size: auto 45px;
-        }
-        .desc {
-            margin: 20px auto;
-            padding-left: 120px;
-            padding-bottom: 10px;
-            background-image: url("http://www.geetest.com/images/mobile/mobile.png");
-            background-repeat: no-repeat;
-            background-position: 0 4px;
-            background-size: 100px 45px;
-            width: 260px;
-            font-size: 14px;
-        }
-        .fields>.user, .fields>.password {
-            border: 1px solid #BBBBBB;
-            padding: 5px 0 5px 35px;
-            background-repeat: no-repeat;
-            background-position: 9px 50%;
-            background-size: auto 20px;
-            text-align: left;
-        }
-        .fields>div {
-            margin: 15px auto;
-            height: 40px;
-            width: 260px;
-            overflow: hidden;
-        }
-        .user {
-            background-image: url("http://www.geetest.com/images/mobile/user.png");
-        }
-        .password {
-            background-image: url("http://www.geetest.com/images/mobile/password.png");
-        }
-        .fields input {
-            outline: none;
-            border: 1px solid #BBBBBB;
-            border-width: 0 0 0 1px;
-            border-radius: 0;
-            padding-left: 10px;
-            text-align: left;
-            font-family: Consolas monospace;
-            font-size: 16px;
-            height: 29px;
-            background-color: #FFFFFF;
-        }
-        .fields input.btn {
-            line-height: 40px;
-            height:40px;
-            width: 260px;
-            text-align:center;
-            cursor: pointer;
-            -webkit-user-select: none;
-            color: white;
-            outline: none;
-            font-size: 15px;
-            background-color: #72C47C;
-            border-radius: 2px;
-        }
-        #mask{
-            display:none;
+        /* 以下遮罩层为demo.用户可自行设计实现 */
+        #mask {
+            display: none;
             position: fixed;
-            text-align:center;
+            text-align: center;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.5);
             overflow: auto;
         }
-        .popup-mobile{
+        /* 可自行设计实现captcha的位置大小 */
+        .popup-mobile {
             position: relative;
         }
-        #popup-captcha-mobile{
+        #popup-captcha-mobile {
             position: absolute;
-            display:none;
-            left:50%;
-            margin-left:-145px;
-            top:30%;
+            display: none;
+            left: 50%;
+            margin-left: -145px;
+            top: 30%;
         }
     </style>
 </head>
@@ -137,7 +75,7 @@
     </p>
     <br>
     <p>
-        <label>密&nbsp;&nbsp;码：</label>
+        <label>密&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
         <input class="inp" type="password" value="123456">
     </p>
 
@@ -220,7 +158,7 @@
     </p>
     <br>
     <p>
-        <label for="password">密&nbsp;&nbsp;码：</label>
+        <label for="password">密&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
         <input class="inp" id="password" type="password" value="123456">
     </p>
 
@@ -273,25 +211,22 @@
 </script>
 <hr>
 
-
+<br>
+<br>
 <div class="popup-mobile">
     <h2>移动端手动用嵌入式（embed）形式实现弹出式Demo</h2>
-    <div class="logo">
-    </div>
-    <h1 style="color:#31B567;margin:0px;font-size: 28px;">极验验证移动端体验</h1>
-    <p style="font-size:16px;">直接点击登录按钮进行验证</p>
     <br>
-    <div class="fields">
-        <div class="user">
-        <input disabled="disabled" type="text" value="hello@geetest.com">
-        </div>
-        <div class="password">
-        <input disabled="disabled" type="password" value="888888">
-        </div>
-        <input class="btn" id="popup-submit-mobile" type="submit" value="登陆">
-    </div>
-    <div class="desc">根据移动端的使用场景使用弹出式的验证方式给用户带来更好的体验
-    </div>
+    <p>
+        <labe>用户名：</labe>
+        <input class="inp" type="text" value="极验验证">
+    </p>
+    <br>
+    <p>
+        <label>密&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
+        <input class="inp"  type="password" value="123456">
+    </p>
+    <br>
+    <input class="btn" id="popup-submit-mobile" type="submit" value="提交">
     <div id="mask">
     </div>
     <div id="popup-captcha-mobile"></div>
