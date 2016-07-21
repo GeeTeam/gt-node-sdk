@@ -53,11 +53,13 @@
             position: relative;
         }
         #popup-captcha-mobile {
-            position: absolute;
+            position: fixed;
             display: none;
             left: 50%;
-            margin-left: -145px;
-            top: 30%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            -webkit-transform: translate(-50%, -50%);
+            z-index: 9999;
         }
     </style>
 </head>
@@ -103,7 +105,7 @@
                 return;
             }
             $.ajax({
-                url: "/geetest/validate", // 进行二次验证
+                url: "/pc-geetest/validate", // 进行二次验证
                 type: "post",
                 dataType: "json",
                 data: {
@@ -129,7 +131,7 @@
     };
     $.ajax({
         // 获取id，challenge，success（是否启用failback）
-        url: "/geetest/register?t=" + (new Date()).getTime(), // 加随机数防止缓存
+        url: "/pc-geetest/register?t=" + (new Date()).getTime(), // 加随机数防止缓存
         type: "get",
         dataType: "json",
         success: function (data) {
@@ -149,7 +151,7 @@
 <br><br>
 <hr>
 <br><br>
-<form class="popup" action="/geetest/form-validate" method="post">
+<form class="popup" action="/pc-geetest/form-validate" method="post">
     <h2>嵌入式Demo，使用表单形式提交二次验证所需的验证结果值</h2>
     <br>
     <p>
@@ -168,7 +170,6 @@
 
     <br>
     <input class="btn" id="embed-submit" type="submit" value="提交">
-
 </form>
 
 <script>
@@ -192,7 +193,7 @@
     };
     $.ajax({
         // 获取id，challenge，success（是否启用failback）
-        url: "/geetest/register?t=" + (new Date()).getTime(), // 加随机数防止缓存
+        url: "/pc-geetest/register?t=" + (new Date()).getTime(), // 加随机数防止缓存
         type: "get",
         dataType: "json",
         success: function (data) {
@@ -209,12 +210,11 @@
         }
     });
 </script>
+<br><br>
 <hr>
-
-<br>
-<br>
+<br><br>
 <div class="popup-mobile">
-    <h2>移动端手动用嵌入式（embed）形式实现弹出式Demo</h2>
+    <h2>移动端手动实现弹出式Demo</h2>
     <br>
     <p>
         <labe>用户名：</labe>
@@ -227,10 +227,8 @@
     </p>
     <br>
     <input class="btn" id="popup-submit-mobile" type="submit" value="提交">
-    <div id="mask">
-    </div>
+    <div id="mask"></div>
     <div id="popup-captcha-mobile"></div>
-    
 </div>
 
 <script>
@@ -244,7 +242,7 @@
                 $("#popup-captcha-mobile")[0].style.display="none";
             });
             $.ajax({
-                url: "/geetest/validate", // 进行二次验证
+                url: "/mobile-geetest/validate", // 进行二次验证
                 type: "post",
                 dataType: "json",
                 data: {
@@ -262,8 +260,6 @@
                 }
             });
         });
-        // 弹出式需要绑定触发验证码弹出按钮
-        captchaObj.bindOn("#popup-submit-mobile");
         // 将验证码加到id为captcha的元素里
         captchaObj.appendTo("#popup-captcha-mobile");
         //拖动验证成功后两秒(可自行设置时间)自动发生跳转等行为
@@ -279,7 +275,7 @@
     };
     $.ajax({
         // 获取id，challenge，success（是否启用failback）
-        url: "/geetest/register?t=" + (new Date()).getTime(), // 加随机数防止缓存
+        url: "/mobile-geetest/register?t=" + (new Date()).getTime(), // 加随机数防止缓存
         type: "get",
         dataType: "json",
         success: function (data) {
@@ -289,7 +285,6 @@
             initGeetest({
                 gt: data.gt,
                 challenge: data.challenge,
-                product: "embed", // 产品形式，包括：float，embed，popup。注意只对PC版验证码有效
                 offline: !data.success // 表示用户后台检测极验服务器是否宕机，一般不需要关注
                 // 更多配置参数请参见：http://www.geetest.com/install/sections/idx-client-sdk.html#config
             }, handlerPopupMobile);
