@@ -9,6 +9,7 @@
             margin: 50px 0;
             text-align: center;
         }
+
         .inp {
             border: 1px solid gray;
             padding: 0 10px;
@@ -16,6 +17,7 @@
             height: 30px;
             font-size: 18px;
         }
+
         .btn {
             border: 1px solid gray;
             width: 100px;
@@ -23,19 +25,24 @@
             font-size: 18px;
             cursor: pointer;
         }
+
         #embed-captcha {
             width: 300px;
             margin: 0 auto;
         }
+
         .show {
             display: block;
         }
+
         .hide {
             display: none;
         }
+
         #notice {
             color: red;
         }
+
         /* 以下遮罩层为demo.用户可自行设计实现 */
         #mask {
             display: none;
@@ -48,10 +55,12 @@
             background-color: rgba(0, 0, 0, 0.5);
             overflow: auto;
         }
+
         /* 可自行设计实现captcha的位置大小 */
         .popup-mobile {
             position: relative;
         }
+
         #popup-captcha-mobile {
             position: fixed;
             display: none;
@@ -68,26 +77,8 @@
 <br><br>
 <hr>
 <br><br>
-<div class="popup">
-    <h2>弹出式Demo，使用ajax形式提交二次验证码所需的验证结果值</h2>
-    <br>
-    <p>
-        <labe>用户名：</labe>
-        <input class="inp" type="text" value="极验验证">
-    </p>
-    <br>
-    <p>
-        <label>密&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
-        <input class="inp" type="password" value="123456">
-    </p>
 
-    <br>
-    <input class="btn" id="popup-submit" type="submit" value="提交">
-
-    <div id="popup-captcha"></div>
-</div>
-
-<!-- 为使用方便，直接使用jquery.js库 -->
+<!-- 为使用方便，直接使用jquery.js库，如您代码中不需要，可以去掉 -->
 <script src="http://code.jquery.com/jquery-1.12.3.min.js"></script>
 <!-- 引入封装了failback的接口--initGeetest -->
 <script src="http://static.geetest.com/static/tools/gt.js"></script>
@@ -96,20 +87,38 @@
 <!-- <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script> -->
 <!-- <script src="https://static.geetest.com/static/tools/gt.js"></script> -->
 
+<div class="popup">
+    <h2>弹出式Demo，使用ajax形式提交二次验证码所需的验证结果值</h2>
+    <br>
+    <p>
+        <labe>用户名：</labe>
+        <input id="username1" class="inp" type="text" value="极验验证">
+    </p>
+    <br>
+    <p>
+        <label>密&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
+        <input id="password1" class="inp" type="password" value="123456">
+    </p>
+
+    <br>
+    <input class="btn" id="popup-submit" type="submit" value="提交">
+
+    <div id="popup-captcha"></div>
+</div>
+
 <script>
     var handlerPopup = function (captchaObj) {
-        $("#popup-submit").click(function () {
+
+        // 成功的回调
+        captchaObj.onSuccess(function () {
             var validate = captchaObj.getValidate();
-            if (!validate) {
-                alert('请先完成验证！');
-                return;
-            }
             $.ajax({
                 url: "/pc-geetest/validate", // 进行二次验证
                 type: "post",
                 dataType: "json",
                 data: {
-                    // 二次验证所需的三个值
+                    username: $('#username1').val(),
+                    password: $('#password1').val(),
                     geetest_challenge: validate.geetest_challenge,
                     geetest_validate: validate.geetest_validate,
                     geetest_seccode: validate.geetest_seccode
@@ -123,14 +132,18 @@
                 }
             });
         });
-        // 弹出式需要绑定触发验证码弹出按钮
-        captchaObj.bindOn("#popup-submit");
+
+        $("#popup-submit").click(function () {
+            captchaObj.show();
+        });
+
         // 将验证码加到id为captcha的元素里
         captchaObj.appendTo("#popup-captcha");
         // 更多接口参考：http://www.geetest.com/install/sections/idx-client-sdk.html
     };
+
+    // 验证开始需要向网站主后台获取id，challenge，success（是否启用failback）
     $.ajax({
-        // 获取id，challenge，success（是否启用failback）
         url: "/pc-geetest/register?t=" + (new Date()).getTime(), // 加随机数防止缓存
         type: "get",
         dataType: "json",
@@ -155,13 +168,13 @@
     <h2>嵌入式Demo，使用表单形式提交二次验证所需的验证结果值</h2>
     <br>
     <p>
-        <label for="user">用户名：</label>
-        <input class="inp" id="user" type="text" value="极验验证">
+        <label for="username2">用户名：</label>
+        <input class="inp" id="username2" type="text" value="极验验证">
     </p>
     <br>
     <p>
-        <label for="password">密&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
-        <input class="inp" id="password" type="password" value="123456">
+        <label for="password2">密&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
+        <input class="inp" id="password2" type="password" value="123456">
     </p>
 
     <div id="embed-captcha"></div>
@@ -184,7 +197,7 @@
                 e.preventDefault();
             }
         });
-        // 将验证码加到id为captcha的元素里
+        // 将验证码加到id为captcha的元素里，同时会有三个input的值：geetest_challenge, geetest_validate, geetest_seccode
         captchaObj.appendTo("#embed-captcha");
         captchaObj.onReady(function () {
             $("#wait")[0].className = "hide";
@@ -217,13 +230,13 @@
     <h2>移动端手动实现弹出式Demo</h2>
     <br>
     <p>
-        <labe>用户名：</labe>
-        <input class="inp" type="text" value="极验验证">
+        <labe for="username3">用户名：</labe>
+        <input id="username3" class="inp" type="text" value="极验验证">
     </p>
     <br>
     <p>
-        <label>密&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
-        <input class="inp"  type="password" value="123456">
+        <label for="password3">密&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
+        <input id="password3" class="inp" type="password" value="123456">
     </p>
     <br>
     <input class="btn" id="popup-submit-mobile" type="submit" value="提交">
@@ -232,21 +245,29 @@
 </div>
 
 <script>
+    $("#mask").click(function () {
+        $("#mask, #popup-captcha-mobile").hide();
+    });
+    $("#popup-submit-mobile").click(function () {
+        $("#mask, #popup-captcha-mobile").show();
+    });
+
     var handlerPopupMobile = function (captchaObj) {
-        $("#popup-submit-mobile").click(function () {
+
+        // 将验证码加到id为captcha的元素里
+        captchaObj.appendTo("#popup-captcha-mobile");
+        //拖动验证成功后两秒(可自行设置时间)自动发生跳转等行为
+        captchaObj.onSuccess(function () {
             var validate = captchaObj.getValidate();
-            $("#mask")[0].style.display="block";
-            $("#popup-captcha-mobile")[0].style.display="block";
-            $("#mask").click(function() {
-                this.style.display="none";
-                $("#popup-captcha-mobile")[0].style.display="none";
-            });
+
             $.ajax({
                 url: "/mobile-geetest/validate", // 进行二次验证
                 type: "post",
                 dataType: "json",
                 data: {
                     // 二次验证所需的三个值
+                    username: $('#username3').val(),
+                    password: $('#password3').val(),
                     geetest_challenge: validate.geetest_challenge,
                     geetest_validate: validate.geetest_validate,
                     geetest_seccode: validate.geetest_seccode
@@ -259,17 +280,6 @@
                     }
                 }
             });
-        });
-        // 将验证码加到id为captcha的元素里
-        captchaObj.appendTo("#popup-captcha-mobile");
-        //拖动验证成功后两秒(可自行设置时间)自动发生跳转等行为
-        captchaObj.onSuccess(function () {
-            setTimeout(function(){
-                //验证成功后弹出的验证消失，页面并发生跳转
-                $("#mask")[0].style.display="none";
-                $("#popup-captcha-mobile")[0].style.display="none";
-                $("#popup-submit-mobile").click();
-            },10)
         });
         // 更多接口参考：http://www.geetest.com/install/sections/idx-client-sdk.html
     };
