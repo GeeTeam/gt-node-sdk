@@ -24,8 +24,8 @@ sdk提供Geetest构造函数，实例化时需要传入一个配置对象
 
 配置对象的字段如下：
 
-- geetest_id：验证私钥，**必须**
-- geetest_key：验证公钥，**必须**
+- geetest_id：验证公钥，**必须**
+- geetest_key：验证私钥，**必须**
 - protocol：与极验服务器交互时使用的协议，默认为http://，**可选**
 - apiServer：针对私有化用户提供对默认的api.geetest.com进行修改，普通用户无需关注此选项，**可选**
 
