@@ -1,3 +1,5 @@
+**注意：3.x.x修改了所传入的字段名称，将publicKey和privateKey修改为geetsest\_id和geetest\_key，升级会造成不兼容问题，请各位注意在升级前修改相应的字段名称，新用户无须关注此修改**
+
 # Install 安装
 
 ```
@@ -22,17 +24,17 @@ sdk提供Geetest构造函数，实例化时需要传入一个配置对象
 
 配置对象的字段如下：
 
-- privateKey：验证私钥，**必须**
-- publicKey：验证公钥，**必须**
+- geetest_id：验证私钥，**必须**
+- geetest_key：验证公钥，**必须**
 - protocol：与极验服务器交互时使用的协议，默认为http://，**可选**
 - apiServer：针对私有化用户提供对默认的api.geetest.com进行修改，普通用户无需关注此选项，**可选**
 
-privateKey和publicKey申请地址：http://account.geetest.com/
+geetest\_id和geetest\_keyy申请地址：http://account.geetest.com/
 ```
 var Geetest = require('geetest');
 var captcha = new Geetest({
-    privateKey: 'xxx', // 将xxx替换为您申请的privateKey
-    publicKey: 'xxx', // 将xxx替换为您申请的publicKey
+    geetest_id: 'xxx', // 将xxx替换为您申请的id
+    geetest_key: 'xxx', // 将xxx替换为您申请的key
 });
 ```
 

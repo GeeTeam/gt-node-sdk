@@ -1,3 +1,7 @@
+# 3.0.0
+
+1. 鉴于遇到很多用户对publicKey和privateKey容易搞混淆，先将其改名为geetest\_id和geetest\_key。因此，和以前的版本无法兼容，所以修改主版本号。
+
 # 2.2.1
 
 1. 优化移动端自实现弹出式验证demo
@@ -37,7 +41,7 @@
 
 # Update in 0.4.0 更新内容
 Use recommended error handler method: callback(err, result).
-规范了错误处理，所有的回调函数现在均遵循node规范，以callback(err, result)的形式，因此您需要按照新的方法修改您的代码以正常运行。 
+规范了错误处理，所有的回调函数现在均遵循node规范，以callback(err, result)的形式，因此您需要按照新的方法修改您的代码以正常运行。
 
 # Update in 0.3.3 更新内容
 You can modify the api server address
@@ -45,11 +49,11 @@ You can modify the api server address
 你现在可以修改APIServer的地址了
 
 # Update in 0.3.1 更新内容
-Use register api to check the server status, if it return false, switch to local captcha manually  
+Use register api to check the server status, if it return false, switch to local captcha manually
 
 现在可以用register接口作为检查服务器是否正常的方法，如果register返回false则切换为本地验证码
 
 # What's New in 0.2.0 更新内容
-Pass public key to use `register` API, optional right now, if you don't use it now, the captcha might broke some time in the future  
+Pass public key to use `register` API, optional right now, if you don't use it now, the captcha might broke some time in the future
 
 将你的Public Key作为第二个参数传入，此参数现在为可选参数，只有传入才能够使用`register`接口。Register接口可能在将来成为必须的接口

@@ -14,11 +14,11 @@ var randint = function (from, to) {
 };
 
 function Geetest(config) {
-    if (!config.privateKey) {
-        throw new Error('Private Key Required');
+    if (!config.geetest_id) {
+        throw new Error('Geetest ID Required');
     }
-    if (!config.publicKey) {
-        throw new Error("Public Key Required");
+    if (!config.geetest_key) {
+        throw new Error("Geetest KEY Required");
     }
     if (config.protocol) {
         this.PROTOCOL = config.protocol;
@@ -27,8 +27,8 @@ function Geetest(config) {
         this.API_SERVER = config.apiServer;
     }
 
-    this.privateKey = config.privateKey;
-    this.publicKey = config.publicKey;
+    this.geetest_id = config.geetest_id;
+    this.geetest_key = config.geetest_key;
 }
 
 Geetest.prototype = {
@@ -81,7 +81,7 @@ Geetest.prototype = {
 
         } else {
 
-            var hash = this.privateKey + 'geetest' + result.challenge;
+            var hash = this.geetest_key + 'geetest' + result.challenge;
             if (result.validate === md5(hash)) {
                 var url = this.PROTOCOL + this.API_SERVER + this.VALIDATE_PATH;
 
@@ -182,7 +182,7 @@ Geetest.prototype = {
 
     _register: function (callback) {
         var url = this.PROTOCOL + this.API_SERVER + this.REGISTER_PATH
-            + '?gt=' + this.publicKey + '&sdk=Node_' + pkg.version;
+            + '?gt=' + this.geetest_id + '&sdk=Node_' + pkg.version;
 
         var that = this;
         request.get(url, {timeout: 2000}, function (err, res, challenge) {
@@ -200,7 +200,7 @@ Geetest.prototype = {
 
                 callback({
                     success: 1,
-                    challenge: md5(challenge + that.privateKey)
+                    challenge: md5(challenge + that.geetest_key)
                 });
             }
         });

@@ -14,15 +14,15 @@ app.get("/", function (req, res) {
 // pc 端接口
 
 var pcGeetest = new Geetest({
-    privateKey: '36fc3fe98530eea08dfc6ce76e3d24c4',
-    publicKey: 'b46d1900d0a894591916ea94ea91bd2c'
+    geetest_id: 'b46d1900d0a894591916ea94ea91bd2c',
+    geetest_key: '36fc3fe98530eea08dfc6ce76e3d24c4'
 });
 app.get("/pc-geetest/register", function (req, res) {
 
     // 向极验申请一次验证所需的challenge
     pcGeetest.register(function (data) {
         res.send(JSON.stringify({
-            gt: pcGeetest.publicKey,
+            gt: pcGeetest.geetest_id,
             challenge: data.challenge,
             success: data.success
         }));
@@ -69,15 +69,15 @@ app.post("/pc-geetest/form-validate", function (req, res) {
 
 // 移动端接口
 var mobileGeetest = new Geetest({
-    privateKey: 'f5883f4ee3bd4fa8caec67941de1b903',
-    publicKey: '7c25da6fe21944cfe507d2f9876775a9'
+    geetest_id: '7c25da6fe21944cfe507d2f9876775a9',
+    geetest_key: 'f5883f4ee3bd4fa8caec67941de1b903'
 });
 app.get("/mobile-geetest/register", function (req, res) {
 
     // 向极验申请一次验证所需的challenge
     mobileGeetest.register(function (data) {
         res.send(JSON.stringify({
-            gt: mobileGeetest.publicKey,
+            gt: mobileGeetest.geetest_id,
             challenge: data.challenge,
             success: data.success
         }));
@@ -105,7 +105,7 @@ app.post("/mobile-geetest/validate", function (req, res) {
     });
 });
 
-var port = 8080;
+var port = 9988;
 app.listen(port, function () {
     console.log('listening at http://localhost:' + port)
 });
