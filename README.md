@@ -30,7 +30,7 @@ sdk提供Geetest构造函数，实例化时需要传入一个配置对象
 - apiServer：针对私有化用户提供对默认的api.geetest.com进行修改，普通用户无需关注此选项，**可选**
 
 geetest\_id和geetest\_key申请地址：http://account.geetest.com/
-```
+```js
 var Geetest = require('geetest');
 var captcha = new Geetest({
     geetest_id: 'xxx', // 将xxx替换为您申请的id
@@ -41,7 +41,7 @@ var captcha = new Geetest({
 上述Geetest的实例captcha提供两个方法：
 
 ## register(callback)
-```
+```js
 captcha.register(function (data) {
     // data为一个对象，里面包含challenge和success字段
     // 正常模式下challenge为32为，success为1
@@ -49,7 +49,7 @@ captcha.register(function (data) {
 });
 ```
 ## validate(result, callback)
-```
+```js
 captcha.validate({
     challenge: 'xxx',
     validate: 'xxx',
