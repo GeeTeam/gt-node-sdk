@@ -60,9 +60,9 @@ app.post("/pc-geetest/form-validate", function (req, res) {
 
     }, function (err, result) {
         if (err || !result) {
-            res.send("<h1 style='text-align: center'>登陆失败</h1>");
+            res.send("<h1 style='text-align: center'>登录失败</h1>");
         } else {
-            res.send("<h1 style='text-align: center'>登陆成功</h1>");
+            res.send("<h1 style='text-align: center'>登录成功</h1>");
         }
     });
 });
