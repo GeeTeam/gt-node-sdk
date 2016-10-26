@@ -46,6 +46,13 @@ captcha.register(function (data) {
     // data为一个对象，里面包含challenge和success字段
     // 正常模式下challenge为32为，success为1
     // failback模式下challenge为34为，success为0
+    // 返回给前段时，需要带上captcha中的geetest_id
+    // 例如
+    var body = {
+        gt: captcha.geetest_id,
+        challenge: data.challenge,
+        success: data.success
+    }
 });
 ```
 ## validate(result, callback)
@@ -57,7 +64,7 @@ captcha.validate({
 }, function (err, success) {
     // err存在表示出现网络错误
     // success表示二次查询是否成功
-}
+})
 ```
 
 
