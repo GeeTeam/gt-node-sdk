@@ -1,3 +1,9 @@
+# 4.0.0
+
+1. 完善register和validate接口提供的promise风格的异步处理形式
+2. 对于使用回调（handler）形式，符合了NodeJS中对错误的通知（即回调的第一个参数为err）
+3. 修改demo，使用了promise风格和回调风格，同时强调了failback流程
+
 # 3.0.0
 
 1. 鉴于遇到很多用户对publicKey和privateKey容易搞混淆，先将其改名为geetest\_id和geetest\_key。因此，和以前的版本无法兼容，所以修改主版本号。

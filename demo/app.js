@@ -19,51 +19,81 @@ var pcGeetest = new Geetest({
 });
 app.get("/pc-geetest/register", function (req, res) {
 
-    // 向极验申请一次验证所需的challenge
-    pcGeetest.register(function (data) {
-        res.send(JSON.stringify({
-            gt: pcGeetest.geetest_id,
-            challenge: data.challenge,
-            success: data.success
-        }));
+    // 向极验申请每次验证所需的challenge
+    pcGeetest.register(function (err, data) {
+        if (err) {
+            // 进入failback，如果一直进入此模式，请检查服务器到极验服务器是否可访问
+            // 可以通过修改hosts把极验服务器api.geetest.com指到不可访问的地址
+
+            // 为以防万一，你可以选择以下两种方式之一：
+
+            // 1. 继续使用极验提供的failback备用方案
+            res.send(data);
+
+            // 2. 使用自己提供的备用方案
+            // todo
+
+        } else {
+            // 正常模式
+            res.send(data);
+        }
     });
 });
 app.post("/pc-geetest/validate", function (req, res) {
 
-    // 对ajax提交的验证结果值进行验证
+    // 对ajax提供的验证凭证进行二次验证
     pcGeetest.validate({
         challenge: req.body.geetest_challenge,
         validate: req.body.geetest_validate,
         seccode: req.body.geetest_seccode
-    }, function (err, result) {
+    }, function (err, success) {
 
-        var data = {status: "success", info: '登录成功'};
+        if (err) {
+            // 网络错误
+            res.send({
+                status: "error",
+                info: err
+            });
+        } else if (!success) {
 
-        if (err || !result) {
+            // 二次验证失败
+            res.send({
+                status: "fail",
+                info: '登录失败'
+            });
+        } else {
 
-            data.status = "fail";
-            data.info = '登录失败';
+            res.send({
+                status: "success",
+                info: '登录成功'
+            });
         }
-
-        res.send(JSON.stringify(data));
-
     });
 });
 app.post("/pc-geetest/form-validate", function (req, res) {
 
-    // 对form表单的结果进行验证
+    // 对form表单提供的验证凭证进行验证
     pcGeetest.validate({
 
         challenge: req.body.geetest_challenge,
         validate: req.body.geetest_validate,
         seccode: req.body.geetest_seccode
 
-    }, function (err, result) {
-        if (err || !result) {
+    }, function (err, success) {
+
+        if (err) {
+            // 网络错误
+            res.send(err);
+
+        } else if (!success) {
+
+            // 二次验证失败
             res.send("<h1 style='text-align: center'>登录失败</h1>");
+
         } else {
             res.send("<h1 style='text-align: center'>登录成功</h1>");
         }
+
     });
 });
 
@@ -74,34 +104,52 @@ var mobileGeetest = new Geetest({
 });
 app.get("/mobile-geetest/register", function (req, res) {
 
-    // 向极验申请一次验证所需的challenge
-    mobileGeetest.register(function (data) {
-        res.send(JSON.stringify({
-            gt: mobileGeetest.geetest_id,
-            challenge: data.challenge,
-            success: data.success
-        }));
+    // 向极验申请每次验证所需的challenge
+    mobileGeetest.register().then(function (data) {
+
+        // 正常模式
+        res.send(data);
+
+    }, function (data) {
+        // 进入failback，data.err为错误原因
+        // 如果一直进入此模式，请检查服务器到极验服务器是否可访问
+
+        // 可以通过修改hosts把极验服务器api.geetest.com指到不可访问的地址
+
+        // 为以防万一，你可以选择以下两种方式之一：
+
+        // 1. 继续使用极验提供的failback备用方案
+        res.send(data.data);
+
+        // 2. 使用自己提供的备用方案
+        // todo
     });
 });
 app.post("/mobile-geetest/validate", function (req, res) {
 
-    // 对ajax提交的验证结果值进行验证
+    // 对ajax提供的验证凭证进行二次验证
     mobileGeetest.validate({
         challenge: req.body.geetest_challenge,
         validate: req.body.geetest_validate,
         seccode: req.body.geetest_seccode
-    }, function (err, result) {
-
-        var data = {status: "success", info: '登录成功'};
-
-        if (err || !result) {
-
-            data.status = "fail";
-            data.info = '登录失败';
+    }).then(function (success) {
+        if (success) {
+            res.send({
+                status: "success",
+                info: '登录成功'
+            });
+        } else {
+            res.send({
+                status: "fail",
+                info: '登录失败'
+            });
         }
-
-        res.send(JSON.stringify(data));
-
+    }, function (err) {
+        // 网络错误
+        res.send({
+            status: "error",
+            info: err
+        });
     });
 });
 

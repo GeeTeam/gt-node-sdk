@@ -84,7 +84,6 @@ Geetest.prototype = {
             var hash = this.geetest_key + 'geetest' + result.challenge;
             if (result.validate === md5(hash)) {
                 var url = this.PROTOCOL + this.API_SERVER + this.VALIDATE_PATH;
-
                 request.post(url, {
                     form: {
                         seccode: result.seccode
@@ -106,7 +105,7 @@ Geetest.prototype = {
 
         var thread = 3;
         var full_bg_name = md5(full_bg_index).slice(0, 10);
-        var bg_name = md5(img_grp_index).slice(10,20);
+        var bg_name = md5(img_grp_index).slice(10, 20);
         var answer_decode = '';
         var i;
         for (i = 0; i < 9; i = i + 1) {
@@ -133,11 +132,11 @@ Geetest.prototype = {
         if (userresponse.length > 100) {
             return 0;
         }
-        var shuzi = [1,2,5,10,50];
+        var shuzi = [1, 2, 5, 10, 50];
         var chongfu = [];
         var key = {};
         var count = 0, i, len;
-        for (i = 0, len = challenge.length; i < len; i =i + 1) {
+        for (i = 0, len = challenge.length; i < len; i = i + 1) {
             var c = challenge[i];
             if (chongfu.indexOf(c) === -1) {
                 chongfu.push(c);
@@ -166,16 +165,22 @@ Geetest.prototype = {
         return decode_res;
     },
 
-
     register: function (callback) {
 
         var that = this;
-        return new Promise(function (resolve) {
-            that._register(function (data) {
+        return new Promise(function (resolve, reject) {
+            that._register(function (err, data) {
                 if (typeof callback === 'function') {
-                    callback(data);
+                    callback(err, data);
                 }
-                resolve(data);
+                if (err) {
+                    reject({
+                        err: err,
+                        data: data
+                    });
+                } else {
+                    resolve(data);
+                }
             });
         });
     },
@@ -189,30 +194,32 @@ Geetest.prototype = {
 
             if (err || challenge.length !== 32) {
 
-                // api.geetest.com 宕机
-
-                callback({
+                // api.geetest.com down
+                callback(err || that.API_SERVER +
+                    ' is down! you can use Geetest\'s failback or your own back up plan!', {
                     success: 0,
-                    challenge: that._make_challenge()
+                    challenge: that._make_challenge(),
+                    gt: that.geetest_id
                 });
 
             } else {
 
-                callback({
+                callback(null, {
                     success: 1,
-                    challenge: md5(challenge + that.geetest_key)
+                    challenge: md5(challenge + that.geetest_key),
+                    gt: that.geetest_id
                 });
             }
         });
     },
 
     _make_challenge: function () {
-        var rnd1 = randint(0,90);
-        var rnd2 = randint(0,90);
+        var rnd1 = randint(0, 90);
+        var rnd2 = randint(0, 90);
         var md5_str1 = md5(rnd1);
         var md5_str2 = md5(rnd2);
 
-        return md5_str1 + md5_str2.slice(0,2);
+        return md5_str1 + md5_str2.slice(0, 2);
     }
 };
 

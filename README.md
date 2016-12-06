@@ -1,9 +1,9 @@
-**注意：3.x.x修改了所传入的字段名称，将publicKey和privateKey修改为geetest\_id和geetest\_key，升级会造成不兼容问题，请各位注意在升级前修改相应的字段名称，新用户无须关注此修改**
+**注意：3.x.x之后修改了所传入的字段名称，将publicKey和privateKey修改为geetest\_id和geetest\_key，升级会造成不兼容问题，请各位注意在升级前修改相应的字段名称，新用户无须关注此修改**
 
 # Install 安装
 
 ```
-npm install geetest
+npm install geetest --save
 ```
 
 # 运行DEMO
