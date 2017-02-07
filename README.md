@@ -13,7 +13,7 @@ cd Project
 git clone https://github.com/GeeTeam/gt-node-sdk.git
 cd gt-node-sdk
 npm install
-npm run server
+npm start
 // 最后请打开浏览器访问localhost:8080
 // 了解sdk的使用方式请查阅demo目录下的app.js文件
 ```
