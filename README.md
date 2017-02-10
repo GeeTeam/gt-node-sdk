@@ -1,4 +1,4 @@
-**注意：3.x.x之后修改了所传入的字段名称，将publicKey和privateKey修改为geetest\_id和geetest\_key，升级会造成不兼容问题，请各位注意在升级前修改相应的字段名称，新用户无须关注此修改**
+**注意：3.x.x之后修改了所传入的字段名称，将 `publicKey` 和 `privateKey` 修改为 `geetest_id` 和 `geetest_key` ，升级会造成不兼容问题，请各位注意在升级前修改相应的字段名称，新用户无须关注此修改**
 
 # Install 安装
 
@@ -20,55 +20,122 @@ npm start
 
 # 使用说明
 
-sdk提供Geetest构造函数，实例化时需要传入一个配置对象
+sdk 提供 `Geetest` 构造函数，实例化时需要传入一个配置对象。
 
 配置对象的字段如下：
 
-- geetest_id：验证公钥，**必须**
-- geetest_key：验证私钥，**必须**
-- protocol：与极验服务器交互时使用的协议，默认为http://，**可选**
-- apiServer：针对私有化用户提供对默认的api.geetest.com进行修改，普通用户无需关注此选项，**可选**
+- `geetest_id`：验证公钥，**必须**
+- `geetest_key`：验证私钥，**必须**
+- `protocol`：与极验服务器交互时使用的协议，默认为 `http://`，**可选**
+- `api_server`：针对私有化用户提供对默认的 `api.geetest.com` 进行修改，普通用户无需关注此选项，**可选**
 
-geetest\_id和geetest\_key申请地址：http://account.geetest.com/
+`geetest_id` 和 `geetest_key` 申请地址：[account.geetest.com](http://account.geetest.com/)
+
+申请后，初始化 `Geetest`：
+
 ```js
 var Geetest = require('geetest');
+
 var captcha = new Geetest({
     geetest_id: 'xxx', // 将xxx替换为您申请的id
     geetest_key: 'xxx', // 将xxx替换为您申请的key
 });
 ```
 
-上述Geetest的实例captcha提供两个方法：
+上述 `Geetest` 的实例 `captcha` 提供两个方法：
 
-## register(callback)
+## `register(callback)`
+
 ```js
-captcha.register(function (data) {
-    // data为一个对象，里面包含challenge和success字段
-    // 正常模式下challenge为32为，success为1
-    // failback模式下challenge为34为，success为0
-    // 返回给前段时，需要带上captcha中的geetest_id
-    // 例如
-    var body = {
-        gt: captcha.geetest_id,
-        challenge: data.challenge,
-        success: data.success
+// 回调形式
+captcha.register(function (err, data) {
+    
+    // err 表示发生错误
+    if (err) {
+        console.error(err);
+        return;
     }
+    
+    // data 为一个对象，包含 gt, challenge, success, new_captcha 字段
+    // success 为 1 表示正常模式，为 0 表示宕机模式（failback, fallback）
+    var body = {
+        gt: data.geetest_id,
+        challenge: data.challenge,
+        success: data.success,
+        new_captcha: data.new_captcha
+    };
+    
+    // 将 body 发送给前端...
+});
+
+// Promise 形式
+captcha.register().then(function (data) {
+    
+    // data 为一个对象，包含 gt, challenge, success, new_captcha 字段
+    // success 为 1 表示正常模式，为 0 表示宕机模式（failback, fallback）
+    var body = {
+        gt: data.geetest_id,
+        challenge: data.challenge,
+        success: data.success,
+        new_captcha: data.new_captcha
+    };
+        
+    // 将 body 发送给前端...
+    
+}, function (err) {
+    console.error(err);
 });
 ```
-## validate(result, callback)
+
+## `validate(result, callback)`
+
 ```js
+// 回调形式
 captcha.validate({
     challenge: 'xxx',
     validate: 'xxx',
     seccode: 'xxx'
 }, function (err, success) {
-    // err存在表示出现网络错误
-    // success表示二次查询是否成功
+
+    if (err) {
+        console.error(err);
+        return;
+    }
+    
+    if (success) {
+            
+            // 二次验证成功，运行用户的操作
+            
+        } else {
+            
+            // 二次验证失败，不允许用户的操作
+            
+        }
+    
+});
+
+// Promise 形式
+captcha.validate({
+    challenge: 'xxx',
+    validate: 'xxx',
+    seccode: 'xxx'
+}).then(function (success) {
+    
+    if (success) {
+        
+        // 二次验证成功，运行用户的操作
+        
+    } else {
+        
+        // 二次验证失败，不允许用户的操作
+        
+    }
+}, function (err) {
+    console.error(err);
 })
 ```
 
-
-### 使用前，强烈建议您阅读我们的 [入门文档](http://www.geetest.com/install/sections/idx-main-frame.html)
+### 使用前，强烈建议您阅读我们的[入门文档](http://www.geetest.com/install/sections/idx-main-frame.html)
 
 ### 更新历史：[CHANGELOG](CHANGELOG.md)
 
