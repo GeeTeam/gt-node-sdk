@@ -61,8 +61,7 @@ captcha.register(function (err, data) {
     var body = {
         gt: data.geetest_id,
         challenge: data.challenge,
-        success: data.success,
-        new_captcha: data.new_captcha
+        success: data.success
     };
     
     // 将 body 发送给前端...
@@ -76,8 +75,7 @@ captcha.register().then(function (data) {
     var body = {
         gt: data.geetest_id,
         challenge: data.challenge,
-        success: data.success,
-        new_captcha: data.new_captcha
+        success: data.success
     };
         
     // 将 body 发送给前端...
