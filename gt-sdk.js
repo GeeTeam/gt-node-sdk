@@ -23,8 +23,8 @@ function Geetest(config) {
     if (config.protocol) {
         this.PROTOCOL = config.protocol;
     }
-    if (config.apiServer) {
-        this.API_SERVER = config.apiServer;
+    if (config.api_server) {
+        this.API_SERVER = config.api_server;
     }
 
     this.geetest_id = config.geetest_id;
@@ -174,10 +174,7 @@ Geetest.prototype = {
                     callback(err, data);
                 }
                 if (err) {
-                    reject({
-                        err: err,
-                        data: data
-                    });
+                    reject(err);
                 } else {
                     resolve(data);
                 }
@@ -194,9 +191,8 @@ Geetest.prototype = {
 
             if (err || challenge.length !== 32) {
 
-                // api.geetest.com down
-                callback(err || that.API_SERVER +
-                    ' is down! you can use Geetest\'s failback or your own back up plan!', {
+                // fallback
+                callback(null, {
                     success: 0,
                     challenge: that._make_challenge(),
                     gt: that.geetest_id
