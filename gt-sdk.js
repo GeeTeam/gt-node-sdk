@@ -27,6 +27,7 @@ function Geetest(config) {
         this.API_SERVER = config.api_server;
     }
 
+    this.new_captcha = config.new_captcha ? true : false;
     this.geetest_id = config.geetest_id;
     this.geetest_key = config.geetest_key;
 }
@@ -195,7 +196,8 @@ Geetest.prototype = {
                 callback(null, {
                     success: 0,
                     challenge: that._make_challenge(),
-                    gt: that.geetest_id
+                    gt: that.geetest_id,
+                    new_captcha: that.new_captcha
                 });
 
             } else {
@@ -203,7 +205,8 @@ Geetest.prototype = {
                 callback(null, {
                     success: 1,
                     challenge: md5(challenge + that.geetest_key),
-                    gt: that.geetest_id
+                    gt: that.geetest_id,
+                    new_captcha: that.new_captcha
                 });
             }
         });

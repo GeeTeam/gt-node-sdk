@@ -37,8 +37,9 @@ sdk 提供 `Geetest` 构造函数，实例化时需要传入一个配置对象�
 var Geetest = require('geetest');
 
 var captcha = new Geetest({
-    geetest_id: 'xxx', // 将xxx替换为您申请的id
-    geetest_key: 'xxx', // 将xxx替换为您申请的key
+    geetest_id: 'xxx', // 将xxx替换为您申请的 id
+    geetest_key: 'xxx', // 将xxx替换为您申请的 key
+    new_captcha: true // 申请的 id 和 key 为新验证
 });
 ```
 
