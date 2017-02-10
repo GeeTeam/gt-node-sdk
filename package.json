@@ -7,11 +7,18 @@
     "Geetest",
     "Captcha"
   ],
-  "author": {
-    "name": "zhangcx93",
-    "email": "zhangcx93@gmail.com",
-    "url": "http://www.geetest.com"
-  },
+  "contributors": [
+    {
+      "name": "zhangcx93",
+      "email": "zhangcx93@gmail.com",
+      "url": "http://www.geetest.com"
+    },
+    {
+      "name": "lhtin",
+      "email": "lehuading@qq.com",
+      "url": "http://www.geetest.com"
+    }
+  ],
   "license": "ISC",
   "dependencies": {
     "request": "^2.54.0"
