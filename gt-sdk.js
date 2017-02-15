@@ -30,6 +30,7 @@ function Geetest(config) {
     this.new_captcha = config.new_captcha ? true : false;
     this.geetest_id = config.geetest_id;
     this.geetest_key = config.geetest_key;
+    this.isFailback = false;
 }
 
 Geetest.prototype = {
@@ -58,26 +59,45 @@ Geetest.prototype = {
     },
 
     _validate: function (result, callback) {
+
         var challenge = result.challenge;
         var validate = result.validate;
 
-        if (validate.split('_').length === 3) {
+        if (this.isFailback) {
 
-            var validate_strs = validate.split('_');
-            var encode_ans = validate_strs[0];
-            var encode_fbii = validate_strs[1];
-            var encode_igi = validate_strs[2];
+            if (this.new_captcha) {
 
-            var decode_ans = this._decode_response(challenge, encode_ans);
-            var decode_fbii = this._decode_response(challenge, encode_fbii);
-            var decode_igi = this._decode_response(challenge, encode_igi);
+                var test = this.challenge === result.challenge &&
+                    md5(this.challenge) === result.validate;
 
-            var validate_result = this._validate_fail_image(decode_ans, decode_fbii, decode_igi);
+                if (test) {
 
-            if (validate_result === 1) {
-                callback(null, true);
+                    callback(null, true);
+
+                } else {
+
+                    callback(null, false);
+
+                }
+
             } else {
-                callback(null, false);
+
+                var validate_strs = validate.split('_');
+                var encode_ans = validate_strs[0];
+                var encode_fbii = validate_strs[1];
+                var encode_igi = validate_strs[2];
+
+                var decode_ans = this._decode_response(challenge, encode_ans);
+                var decode_fbii = this._decode_response(challenge, encode_fbii);
+                var decode_igi = this._decode_response(challenge, encode_igi);
+
+                var validate_result = this._validate_fail_image(decode_ans, decode_fbii, decode_igi);
+
+                if (validate_result === 1) {
+                    callback(null, true);
+                } else {
+                    callback(null, false);
+                }
             }
 
         } else {
@@ -193,18 +213,22 @@ Geetest.prototype = {
             if (err || challenge.length !== 32) {
 
                 // fallback
+                that.isFailback = true;
+                that.challenge = that._make_challenge();
                 callback(null, {
                     success: 0,
-                    challenge: that._make_challenge(),
+                    challenge: that.challenge,
                     gt: that.geetest_id,
                     new_captcha: that.new_captcha
                 });
 
             } else {
 
+                that.isFailback = false;
+                that.challenge = md5(challenge + that.geetest_key);
                 callback(null, {
                     success: 1,
-                    challenge: md5(challenge + that.geetest_key),
+                    challenge: that.challenge,
                     gt: that.geetest_id,
                     new_captcha: that.new_captcha
                 });
