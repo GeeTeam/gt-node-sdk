@@ -1,5 +1,7 @@
 **注意：3.x.x之后修改了所传入的字段名称，将 `publicKey` 和 `privateKey` 修改为 `geetest_id` 和 `geetest_key` ，升级会造成不兼容问题，请各位注意在升级前修改相应的字段名称，新用户无须关注此修改**
 
+**我们现在将 https://static.geetest.com/static/tools/gt.js 文件放在了本地，目的在于利用多CDN，尽可能保证静态文件的加载。**
+
 # Install 安装
 
 ```
